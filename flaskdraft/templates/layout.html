@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width", initial-scale=1, shrink-to-fit="no">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/static/main.css">
+
+  <title>FM Draft Web App</title>
+</head>
+
+<body>
+  <div class = "pb-2 mt-4 mb-2 border-bottom">
+      <h1>FM Draft Web App</h1>
+  </div>
+
+<p class="message">
+  {% with top = get_flashed_messages(category_filter=["top"]) %}
+    {% if top %}
+      {% for message in top %}
+          {{ message }}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  </p>
+{% block content %}
+{% endblock %}
+<p class="message">
+  {% with bottom = get_flashed_messages(category_filter=["bottom"]) %}
+    {% if bottom %}
+      {% for message in bottom %}
+          {{ message }}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</p>
+</body>
+</html>

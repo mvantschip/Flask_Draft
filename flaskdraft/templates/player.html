@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+  <p class="center">Bij gelijke namen, zoek op de website van <a href="https://sortitoutsi.net/search/database">sortitoutsi</a> voor de volgorde van de spelers!</p>
+  <form method="POST" action="">
+    {{ form_player.hidden_tag() }}
+    <div class="form-group">
+      {{ form_player.player(class="form-control col-md-3") }}
+    </div>
+    <div class="form-group">
+      {{ form_player.submit(class="btn btn-outline-info") }}
+    </div>
+    {% if form_player.errors %}
+    {{ form_player.errors }}
+    {% endif %}
+  </form>
+</body>
+{% endblock %}

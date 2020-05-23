@@ -1,0 +1,32 @@
+h1 {
+  text-align: center;
+}
+
+body {
+  margin-left: 20px;
+}
+
+.form-group {
+  text-align: center;
+  margin: auto;
+}
+
+.form-control {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+.btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.message {
+  text-align: center;
+  font-weight: bold;
+  color: red;
+}

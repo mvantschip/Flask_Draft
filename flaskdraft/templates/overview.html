@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<p class="center">
+  Hier vindt u de meeste recente biedingen, de tijden zijn in <b>UTC</b>:
+</p>
+<table class="table">
+  <thead>
+    <tr>
+    <th scope="col">Teamnaam</th>
+    <th scope="col">Speler</th>
+    <th scope="col">Bod</th>
+    <th scope="col">Bod geplaatst op</th>
+    </tr>
+  </thead>
+{% for row in rows %}
+  <tbody>
+    <tr>
+      <td> {{ row.username }} </td>
+      <td> {{ row.player_name }} </td>
+      <td> {{ row.user_bid }} </td>
+      <td> {{ row.date_bid.strftime('%d %B %Y %H:%M:%S') }} </td>
+    </tr>
+  </tbody>
+{% endfor %}
+</table>
+{% endblock %}

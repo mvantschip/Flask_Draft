@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+  {% with danger = get_flashed_messages(category_filter=["danger"]) %}
+    {% if danger %}
+      {% for message in danger %}
+      <div class="alert alert-danger">
+          <strong>Let op!</strong> {{ message }}
+      </div>
+      {% endfor %}
+    {% else %}
+  <p class="center">U heeft gekozen voor: <b>{{ player_name }}</b> van <b>{{ player_club }}<br></b>
+  Minimale waarde: <b>€{{ player_value }} miljoen<br><br>
+  Plaats hier uw bod:</b></p>
+  <form method="POST" action="">
+    {{ form_bids.hidden_tag() }}
+      <div class="form-group">
+        {{ form_bids.bid_player_name.label (class="form-control-label") }}
+        {{ form_bids.bid_player_name (disabled=True, class="form-control col-md-5") }}
+      </div>
+      <div class="form-group">
+        {{ form_bids.bid_player_value.label (class="form-control-label") }}
+        {{ form_bids.bid_player_value (class="form-control col-md-5") }}
+        <small class="form-text text-muted">
+        Bied niet lager dan de minimale waarde van de speler!
+        </small>
+      </div>
+      <div class="form-group">
+        {{ form_bids.username.label (class="form-control-label") }}
+        {{ form_bids.username (class="form-control col-md-5") }}
+      </div>
+      <div class="form-group">
+        {{ form_bids.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+  <p class="center">{{ check_bid }}</p>
+</body>
+    {% endif %}
+  {% endwith %}
+{% endblock %}
