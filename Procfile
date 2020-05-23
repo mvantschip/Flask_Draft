@@ -1,1 +1,1 @@
-web: gunicorn flaskdraft.wsgi:app
+web: gunicorn run:app
