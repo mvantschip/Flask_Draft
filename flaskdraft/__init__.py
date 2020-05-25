@@ -1,12 +1,22 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
+from flaskdraft.config import Config
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///draft.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-db = SQLAlchemy(app)
-SECRET_KEY = os.urandom(32)
-app.config['SECRET_KEY'] = SECRET_KEY
+db = SQLAlchemy()
 
-from flaskdraft import routes
+def create_app(config_class = Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    db.init_app(app)
+
+    from flaskdraft.bids.routes import bids
+    from flaskdraft.main.routes import main
+    from flaskdraft.search.routes import search
+    from flaskdraft.errors.handlers import errors
+    app.register_blueprint(bids)
+    app.register_blueprint(main)
+    app.register_blueprint(search)
+    app.register_blueprint(errors)
+
+    return app
