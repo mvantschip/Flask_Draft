@@ -15,6 +15,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 pipenv==2018.11.26
+psycopg2==2.8.5
 requests==2.23.0
 six==1.15.0
 soupsieve==2.0
