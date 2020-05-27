@@ -33,5 +33,5 @@ def index():
 
 @main.route('/overview', methods=['GET', 'POST'])
 def overview():
-    rows = bid.query.with_entities(bid.username, bid.player_name, bid.user_bid, bid.date_bid, func.max(bid.date_bid)).group_by(bid.player_id).order_by(bid.date_bid.desc()).all()
+    rows = bid.query.order_by(bid.player_id, bid.date_bid.desc()).distinct(bid.player_id).all()
     return render_template('overview.html', rows = rows)
