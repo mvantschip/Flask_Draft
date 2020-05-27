@@ -19,5 +19,7 @@ def create_app(config_class = Config):
     app.register_blueprint(search)
     app.register_blueprint(errors)
 
-    app.app_context().push()
+    with app.app_context():
+        db.create_all()
+    
     return app
