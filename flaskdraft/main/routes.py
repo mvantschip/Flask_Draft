@@ -4,6 +4,7 @@ from flaskdraft import db
 from flaskdraft.main.forms import PlayerSearch
 from flaskdraft.models import bid
 from sqlalchemy import func
+import pytz
 import requests
 import re
 
@@ -35,4 +36,7 @@ def index():
 def overview():
     subq = bid.query.distinct(bid.player_id).subquery()
     rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
+    for row in rows:
+        row.date_bid = row.date_bid.replace(tzinfo=pytz.utc)
+        row.date_bid = row.date_bid.astimezone()
     return render_template('overview.html', rows = rows)
