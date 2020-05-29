@@ -30,11 +30,11 @@ def bid_page():
         if form_bids.bid_player_value.data < player_value:
             session.pop('_flashes', None)
             flash("Uw bod is lager dan de minimale waarde van de speler, probeer opnieuw.", 'bottom')
-            return redirect(url_for('bid_page'))
+            return redirect(url_for('bids.bid_page'))
         elif check_bid and round(form_bids.bid_player_value.data, 2) < min_overbid_value:
             session.pop('_flashes', None)
             flash("Uw bod is te laag om te kunnen overbieden, probeer opnieuw.", 'bottom')
-            return redirect(url_for('bid_page'))
+            return redirect(url_for('bids.bid_page'))
         else:
             user_bid = bid(player_id = player_id, player_name = form_bids.bid_player_name.data, player_value = player_value, username = form_bids.username.data, user_bid = round(form_bids.bid_player_value.data, 2))
             db.session.add(user_bid)
@@ -42,5 +42,4 @@ def bid_page():
             session.pop('_flashes', None)
             flash(f"Bod geplaatst! U heeft €{form_bids.bid_player_value.data} miljoen geboden op {form_bids.bid_player_name.data}! U kunt een nieuw bod plaatsen.", 'bottom')
             return redirect(url_for('main.index'))
-            #return render_template('bids.html', form_bids = form_bids, player_name = player_name, player_club = player_club, player_value = player_value)
     return render_template('bids.html', form_bids = form_bids, player_name = player_name, player_club = player_club, player_value = player_value)
