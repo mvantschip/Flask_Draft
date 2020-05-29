@@ -4,6 +4,7 @@ from flaskdraft import db
 from flaskdraft.main.forms import PlayerSearch
 from flaskdraft.models import bid
 from sqlalchemy import func
+from datetime import datetime
 import pytz
 import requests
 import re
@@ -36,7 +37,14 @@ def index():
 def overview():
     subq = bid.query.distinct(bid.player_id).subquery()
     rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
+    confirmed_list = []
     for row in rows:
+        elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
+        elapsed_time_hours = int(elapsed_time // 3600)
+        if  elapsed_time_hours > 12:
+            confirmed_list.append("True")
+        else:
+            confirmed_list.append("False")
         row.date_bid = row.date_bid.replace(tzinfo=pytz.utc)
         row.date_bid = row.date_bid.astimezone()
-    return render_template('overview.html', rows = rows)
+    return render_template('overview.html', rows = rows, confirmed_list = confirmed_list)

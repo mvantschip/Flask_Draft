@@ -40,6 +40,6 @@ def bid_page():
             db.session.add(user_bid)
             db.session.commit()
             session.pop('_flashes', None)
-            flash(f"Bod geplaatst! U heeft €{form_bids.bid_player_value.data} miljoen geboden op {form_bids.bid_player_name.data}! U kunt een nieuw bod plaatsen.", 'modal')
+            flash(f"Bod geplaatst! U heeft €{form_bids.bid_player_value.data} miljoen geboden op {form_bids.bid_player_name.data}! U kunt een nieuw bod plaatsen.", 'bottom')
             return redirect(url_for('main.index'))
     return render_template('bids.html', form_bids = form_bids, player_name = player_name, player_club = player_club, player_value = player_value)
