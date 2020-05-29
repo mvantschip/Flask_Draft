@@ -24,7 +24,13 @@ def search_page():
         player_id = segments[5]
         player_page = requests.get("https://sortitoutsi.net/football-manager-2020/player/" + player_id + "/" + player_choice, headers = headers).text
         soup = BeautifulSoup(player_page, 'html.parser')
-        value_total = soup.findAll('dd')[8].text
+        test_value_table = soup.find('dl', {'class' : 'dl-horizontal'})
+        test_value = test_value_table.findAll('dt')
+        test_value_list = [i.string for i in test_value]
+        for item in range(len(test_value_list)):
+            if test_value_list[item] == 'Value':
+                test_value_place = item
+        value_total = soup.findAll('dd')[test_value_place].text
         if "k" in value_total or value_total == "£0":
             flash("Uw speler is minder waard dan €1 miljoen, waarde is gezet op €1 miljoen.", 'top')
             value_total = "1m"
