@@ -31,7 +31,7 @@ def search_page():
             if test_value_list[item] == 'Value':
                 test_value_place = item
         value_total = soup.findAll('dd')[test_value_place].text
-        if "k" in value_total or value_total == "£0":
+        if not 'm' in value_total:
             flash("Uw speler is minder waard dan €1 miljoen, waarde is gezet op €1 miljoen.", 'top')
             value_total = "1m"
         value = int(re.sub('[£m]', '', value_total))
