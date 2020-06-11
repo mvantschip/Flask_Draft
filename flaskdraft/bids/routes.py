@@ -46,8 +46,9 @@ def bid_page():
                 user_bid = bid(player_id = player_id, player_name = form_bids.bid_player_name.data, player_value = player_value, username = form_bids.username.data, user_bid = round(form_bids.bid_player_value.data, 2))
                 if check_bid:
                     current_user = registration.query.filter_by(user=current_bid_username).first()
-                    recipient_email = current_user.user_email
-                    send_mail(form_bids, current_bid_username, recipient_email)
+                    if current_user.user_email != None:
+                        recipient_email = current_user.user_email
+                        send_mail(form_bids, current_bid_username, recipient_email)
                 db.session.add(user_bid)
                 db.session.commit()
                 session.pop('_flashes', None)
