@@ -1,0 +1,13 @@
+<html>
+<head>
+<link href="{{ url_for('static', filename='main.css', _external = true) }}" rel="stylesheet">
+<p class="center"><img src="https://i.imgur.com/1qfLLix.png" alt="Gorro FM Draft Logo" style="vertical-align:middle"></img></p>
+<h1>Overboden!</h1>
+</head>
+<body>
+<p class="center">
+Geachte directeur van {{recipient}},<br><br>
+U bent overboden op {{form_bids.bid_player_name.data}} door {{form_bids.username.data}}. Het bod is nu €{{form_bids.bid_player_value.data}} miljoen.
+</p>
+</body>
+</html>

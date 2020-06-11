@@ -1,8 +1,9 @@
 from datetime import datetime
 from flask import Blueprint, request, url_for, render_template, redirect, session, flash, current_app
-from flaskdraft import db
+from flaskdraft import db, bcrypt
 from flaskdraft.bids.forms import PlaceBids
-from flaskdraft.models import bid
+from flaskdraft.models import bid, registration
+from flaskdraft.bids.utils import send_mail
 
 bids = Blueprint('bids', __name__)
 
@@ -26,7 +27,6 @@ def bid_page():
         flash(f"Huidig bod is: €{current_bid_value} miljoen, geboden door {current_bid_username}, {elapsed_time_hours} uur en {elapsed_time_minutes} minuten geleden. U moet 10% meer bieden, dus minimaal: €{min_overbid_value} miljoen.", 'top')
     else:
         form_bids = PlaceBids(bid_player_name = player_name, bid_player_value = player_value)
-        form_bids.username.data = 'Selecteer uw teamnaam'
     if request.method == 'POST' and form_bids.validate_on_submit():
         if form_bids.bid_player_value.data < player_value:
             session.pop('_flashes', None)
@@ -37,10 +37,24 @@ def bid_page():
             flash("Uw bod is te laag om te kunnen overbieden, probeer opnieuw.", 'bottom')
             return redirect(url_for('bids.bid_page'))
         else:
-            user_bid = bid(player_id = player_id, player_name = form_bids.bid_player_name.data, player_value = player_value, username = form_bids.username.data, user_bid = round(form_bids.bid_player_value.data, 2))
-            db.session.add(user_bid)
-            db.session.commit()
-            session.pop('_flashes', None)
-            flash(f"Bod geplaatst! U heeft €{form_bids.bid_player_value.data} miljoen geboden op {form_bids.bid_player_name.data}! U kunt een nieuw bod plaatsen.", 'bottom')
-            return redirect(url_for('main.index'))
+            user = registration.query.filter_by(user=form_bids.username.data).first()
+            if user == None:
+                session.pop('_flashes', None)
+                flash("U moet zich eerst registreren!", "bottom")
+                return redirect(url_for('users.register'))
+            elif user and bcrypt.check_password_hash(user.user_password, form_bids.password.data):
+                user_bid = bid(player_id = player_id, player_name = form_bids.bid_player_name.data, player_value = player_value, username = form_bids.username.data, user_bid = round(form_bids.bid_player_value.data, 2))
+                if check_bid:
+                    current_user = registration.query.filter_by(user=current_bid_username).first()
+                    recipient_email = current_user.user_email
+                    send_mail(form_bids, current_bid_username, recipient_email)
+                db.session.add(user_bid)
+                db.session.commit()
+                session.pop('_flashes', None)
+                flash(f"Bod geplaatst! U heeft €{form_bids.bid_player_value.data} miljoen geboden op {form_bids.bid_player_name.data}! U kunt een nieuw bod plaatsen.", 'bottom')
+                return redirect(url_for('main.index'))
+            else:
+                session.pop('_flashes', None)
+                flash("Verkeerd wachtwoord!", "bottom")
+                return redirect(url_for('bids.bid_page'))
     return render_template('bids.html', form_bids = form_bids, player_name = player_name, player_club = player_club, player_value = player_value)

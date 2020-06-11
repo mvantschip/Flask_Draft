@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+<p class = "center">
+  <a href={{ url_for('main.index') }}>Terug naar hoofdpagina</a>
+</p>
+<body>
+<p class = "center"> Hier kunt u uw e-mailadres en gewenste authenticatiecode registreren! Als u al een account hebt, kunt u hier uw wachtwoord of e-mailadres aanpassen.</p>
+<form method="POST" action="">
+  {{ form_registration.hidden_tag() }}
+    <div class="form-group">
+      {{ form_registration.registration_username.label (class="form-control-label") }}
+      {{ form_registration.registration_username (class="form-control col-md-5") }}
+    </div>
+    <div class="form-group">
+      {{ form_registration.registration_email.label (class="form-control-label") }}
+      {% if form_registration.registration_email.errors %}
+        {{ form_registration.registration_email (class="form-control form-control-is-invalid col-md-5") }}
+      <div class="invalid feedback">
+          {% for error in form_registration.registration_email.errors %}
+            {{ error }}
+          {% endfor %}
+      </div>
+      {% else %}
+        {{ form_registration.registration_email (class="form-control col-md-5") }}
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form_registration.registration_password.label (class="form-control-label") }}
+      {% if form_registration.registration_password.errors %}
+        {{ form_registration.registration_password (class="form-control-is-invalid col-md-5") }}
+        <div class="invalid feedback">
+          {% for error in form_registration.registration_password.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+        {% else %}
+          {{ form_registration.registration_password (class="form-control col-md-5") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form_registration.registration_confirm_password.label (class="form-control-label") }}
+      {% if form_registration.registration_confirm_password.errors %}
+        {{ form_registration.registration_confirm_password (class="form-control-is-invalid col-md-5") }}
+        <div class="invalid feedback">
+          {% for error in form_registration.registration_confirm_password.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+        {% else %}
+          {{ form_registration.registration_confirm_password (class="form-control col-md-5") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form_registration.submit(class="btn btn-outline-info") }}
+    </div>
+</form>
+{% endblock %}
