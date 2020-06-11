@@ -26,6 +26,7 @@ def bid_page():
         flash(f"Huidig bod is: €{current_bid_value} miljoen, geboden door {current_bid_username}, {elapsed_time_hours} uur en {elapsed_time_minutes} minuten geleden. U moet 10% meer bieden, dus minimaal: €{min_overbid_value} miljoen.", 'top')
     else:
         form_bids = PlaceBids(bid_player_name = player_name, bid_player_value = player_value)
+        form_bids.username.data = 'Selecteer uw teamnaam'
     if request.method == 'POST' and form_bids.validate_on_submit():
         if form_bids.bid_player_value.data < player_value:
             session.pop('_flashes', None)
