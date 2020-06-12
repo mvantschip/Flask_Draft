@@ -35,8 +35,7 @@ def index():
 
 @main.route('/overview', methods=['GET', 'POST'])
 def overview():
-    subq = bid.query.distinct(bid.player_id).subquery()
-    rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
+    rows = bid.query.order_by(bid.date_bid.desc()).all()
     confirmed_list = []
     for row in rows:
         elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
@@ -46,5 +45,6 @@ def overview():
         else:
             confirmed_list.append("False")
         row.date_bid = row.date_bid.replace(tzinfo=pytz.utc)
-        row.date_bid = row.date_bid.astimezone()
+        tz = pytz.timezone('Europe/Amsterdam')
+        row.date_bid = row.date_bid.astimezone(tz)
     return render_template('overview.html', rows = rows, confirmed_list = confirmed_list)
