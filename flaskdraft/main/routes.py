@@ -35,15 +35,18 @@ def index():
 
 @main.route('/overview', methods=['GET', 'POST'])
 def overview():
-    rows = bid.query.order_by(bid.date_bid.desc()).all()
+    subq = bid.query.distinct(bid.player_id).subquery()
+    rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
     confirmed_list = []
     for row in rows:
+        #check if 12 hours have passed to mark the confirmed bids as green
         elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
         elapsed_time_hours = int(elapsed_time // 3600)
         if  elapsed_time_hours > 12:
             confirmed_list.append("True")
         else:
             confirmed_list.append("False")
+        #for heroku, specific timezone conversion is required
         row.date_bid = row.date_bid.replace(tzinfo=pytz.utc)
         tz = pytz.timezone('Europe/Amsterdam')
         row.date_bid = row.date_bid.astimezone(tz)

@@ -16,6 +16,14 @@
       <h1>FM Draft Web App</h1>
   </div>
 
+    <nav class="navbar navbar-expand justify-content-center">
+      <div class="navbar-nav">
+        <a href={{ url_for('main.index') }} class="nav-item nav-link">Home</a>
+        <a href={{ url_for('main.overview') }} class="nav-item nav-link">Overzicht</a>
+        <a href={{ url_for('users.register') }} class="nav-item nav-link">Registratie</a>
+      </div>
+    </nav>
+
 <p class="message">
   {% with top = get_flashed_messages(category_filter=["top"]) %}
     {% if top %}
@@ -27,6 +35,7 @@
   </p>
 {% block content %}
 {% endblock %}
+
 <p class="message">
   {% with bottom = get_flashed_messages(category_filter=["bottom"]) %}
     {% if bottom %}
