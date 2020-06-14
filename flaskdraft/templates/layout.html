@@ -14,15 +14,14 @@
 <body>
   <div class = "pb-2 mt-4 mb-2 border-bottom">
       <h1>FM Draft Web App</h1>
+      <nav class="navbar navbar-expand justify-content-center">
+        <div class="navbar-nav">
+          <a href={{ url_for('main.index') }} class="nav-item nav-link">Home</a>
+          <a href={{ url_for('main.overview') }} class="nav-item nav-link">Overzicht</a>
+          <a href={{ url_for('users.register') }} class="nav-item nav-link">Registratie</a>
+        </div>
+      </nav>
   </div>
-
-    <nav class="navbar navbar-expand justify-content-center">
-      <div class="navbar-nav">
-        <a href={{ url_for('main.index') }} class="nav-item nav-link">Home</a>
-        <a href={{ url_for('main.overview') }} class="nav-item nav-link">Overzicht</a>
-        <a href={{ url_for('users.register') }} class="nav-item nav-link">Registratie</a>
-      </div>
-    </nav>
 
 <p class="message">
   {% with top = get_flashed_messages(category_filter=["top"]) %}
