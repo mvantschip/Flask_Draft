@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+<p class = "center">Voer uw wachtwoord in om uw team te bekijken.</p>
+<form method="POST" action="">
+  {{ form_team.hidden_tag() }}
+    <div class="form-group">
+      {{ form_team.team_username.label (class="form-control-label") }}
+      {{ form_team.team_username (class="form-control col-md-5") }}
+    </div>
+    <div class="form-group">
+      {{ form_team.team_password.label (class="form-control-label") }}
+      {% if form_team.team_password.errors %}
+        {{ form_team.team_password (class="form-control-is-invalid col-md-5") }}
+        <div class="invalid feedback">
+          {% for error in form_team.team_password.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+        {% else %}
+          {{ form_team.team_password (class="form-control col-md-5") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+      {{ form_team.submit(class="btn btn-outline-info") }}
+    </div>
+</form>
+{% endblock %}

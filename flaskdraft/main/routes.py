@@ -35,7 +35,7 @@ def index():
 
 @main.route('/overview', methods=['GET', 'POST'])
 def overview():
-    subq = bid.query.distinct(bid.player_id).subquery()
+    subq = bid.query.distinct(bid.player_id).order_by(bid.player_id, bid.date_bid.desc()).subquery()
     rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
     confirmed_list = []
     for row in rows:

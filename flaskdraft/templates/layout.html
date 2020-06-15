@@ -17,8 +17,9 @@
       <nav class="navbar navbar-expand justify-content-center">
         <div class="navbar-nav">
           <a href={{ url_for('main.index') }} class="nav-item nav-link">Home</a>
-          <a href={{ url_for('main.overview') }} class="nav-item nav-link">Overzicht</a>
           <a href={{ url_for('users.register') }} class="nav-item nav-link">Registratie</a>
+          <a href={{ url_for('main.overview') }} class="nav-item nav-link">Overzicht</a>
+          <a href={{ url_for('users.team_login') }} class="nav-item nav-link">Mijn team</a>
         </div>
       </nav>
   </div>
@@ -31,7 +32,7 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
-  </p>
+</p>
 {% block content %}
 {% endblock %}
 

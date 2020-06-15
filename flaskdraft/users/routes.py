@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, session, redirect, url_for
 from flaskdraft import db, bcrypt
-from flaskdraft.models import registration
-from flaskdraft.users.forms import RegistrationForm
-
+from flaskdraft.models import registration, bid
+from flaskdraft.users.forms import RegistrationForm, TeamForm
+from datetime import datetime
+from sqlalchemy import func
 
 users = Blueprint('users', __name__)
 
@@ -23,3 +24,33 @@ def register():
             db.session.commit()
             flash('Uw gegevens zijn ingevoegd!', 'bottom')
     return render_template('registration.html', form_registration = form_registration)
+
+@users.route('/team_login', methods=['GET', 'POST'])
+def team_login():
+    form_team = TeamForm()
+    if request.method == 'POST' and form_team.validate_on_submit():
+        password_query = registration.query.filter_by(user=form_team.team_username.data).first()
+        if bcrypt.check_password_hash(password_query.user_password, form_team.team_password.data):
+            session['team'] = form_team.team_username.data
+            return redirect(url_for('users.team'))
+        else:
+            flash('Verkeerd wachtwoord!', 'bottom')
+    return render_template('team_check.html', form_team = form_team)
+
+@users.route('/team', methods=['GET', 'POST'])
+def team():
+    subq = bid.query.distinct(bid.player_id).filter_by(username=session.get('team')).order_by(bid.player_id, bid.date_bid.desc()).subquery()
+    rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
+    confirmed_list = []
+    total_spent = 0
+    team_budget = 400
+    for row in rows:
+        elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
+        elapsed_time_hours = int(elapsed_time // 3600)
+        if  elapsed_time_hours > 12:
+            confirmed_list.append("True")
+            total_spent = total_spent + row.user_bid
+        else:
+            confirmed_list.append("False")
+    current_budget = team_budget - total_spent
+    return render_template('team.html', rows = rows, header = session.get('team'), confirmed_list = confirmed_list, total_spent = total_spent, current_budget = current_budget)

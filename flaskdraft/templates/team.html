@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+<h3 class="text-center">{{ header }}</h3>
+<p class = "center">Hier ziet u uw huidige en bevestigde biedingen.<br><br>
+  U heeft op dit moment <b>€{{ total_spent }} miljoen</b> uitgegeven.<br>
+  <small>Let op! Dit geldt alleen voor <b>bevestigde</b> spelers</small><br>
+  Uw resterende budget is: <b>€{{ current_budget }} miljoen</b>.</p>
+<table class="table">
+  <thead>
+    <tr>
+    <th scope="col">Speler</th>
+    <th scope="col">Bod in miljoenen</th>
+    <th scope="col">Bod geplaatst op</th>
+    </tr>
+  </thead>
+{% for row in rows %}
+  <tbody>
+    <tr {% if confirmed_list[loop.index - 1] == "True" %} class="table-success" {% endif %}>
+      <td> {{ row.player_name }} </td>
+      <td> {{ row.user_bid }} </td>
+      <td> {{ row.date_bid.strftime('%d %B %Y %H:%M:%S') }} </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
