@@ -9,9 +9,10 @@ class RegistrationForm(FlaskForm):
     ('FC Groen Goud', 'FC Groen Goud'), ('Los Banditos', 'Los Banditos'),
     ('v.v. Twenthe 7', 'v.v. Twenthe 7'), ('FC Kuitkramp', 'FC Kuitkramp'),
     ('Boca Seniors', 'Boca Seniors'), ('Newton Heath', 'Newton Heath')]), validators = [DataRequired()])
-    registration_email = StringField('Email', validators=[DataRequired(), Email()])
-    registration_password = PasswordField('Password', validators=[DataRequired()])
-    registration_confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('registration_password')])
+    registration_email = StringField('E-mailadres', validators=[DataRequired(), Email()])
+    registration_password = PasswordField('Wachtwoord', validators=[DataRequired()])
+    registration_confirm_password = PasswordField('Bevestig wachtwoord', validators=[DataRequired(), EqualTo('registration_password')])
+    registration_current_password = PasswordField('Huidig wachtwoord')
     submit = SubmitField('Opslaan')
 
 class TeamForm(FlaskForm):
@@ -21,5 +22,5 @@ class TeamForm(FlaskForm):
     ('FC Groen Goud', 'FC Groen Goud'), ('Los Banditos', 'Los Banditos'),
     ('v.v. Twenthe 7', 'v.v. Twenthe 7'), ('FC Kuitkramp', 'FC Kuitkramp'),
     ('Boca Seniors', 'Boca Seniors'), ('Newton Heath', 'Newton Heath')]), validators = [DataRequired()])
-    team_password = PasswordField('Password', validators=[DataRequired()])
+    team_password = PasswordField('Wachtwoord', validators=[DataRequired()])
     submit = SubmitField('Team bekijken')

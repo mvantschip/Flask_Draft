@@ -14,15 +14,19 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form_registration.registration_password.data).decode('utf-8')
         user_query = registration.query.filter_by(user = form_registration.registration_username.data).first()
         if user_query != None:
-            user_query.user_email = form_registration.registration_email.data
-            user_query.user_password = hashed_password
-            db.session.commit()
-            flash('Uw gegevens zijn bijgewerkt!', 'bottom')
+            if bcrypt.check_password_hash(user_query.user_password, form_registration.registration_password.data):
+                user_query.user_email = form_registration.registration_email.data
+                user_query.user_password = hashed_password
+                db.session.commit()
+                flash('Uw gegevens zijn bijgewerkt!', 'bottom')
+            else:
+                flash('Verkeerd huidig wachtwoord!', 'bottom')
         else:
-            user_registration = registration(user = form_registration.registration_username.data, user_email = form_registration.registration_email.data, user_password = hashed_password)
-            db.session.add(user_registration)
-            db.session.commit()
-            flash('Uw gegevens zijn ingevoegd!', 'bottom')
+                user_registration = registration(user = form_registration.registration_username.data, user_email = form_registration.registration_email.data, user_password = hashed_password)
+                db.session.add(user_registration)
+                db.session.commit()
+                flash('Uw gegevens zijn ingevoegd!', 'bottom')
+
     return render_template('registration.html', form_registration = form_registration)
 
 @users.route('/team_login', methods=['GET', 'POST'])
