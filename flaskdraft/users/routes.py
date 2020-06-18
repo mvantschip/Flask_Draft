@@ -47,6 +47,7 @@ def team():
     rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
     confirmed_list = []
     total_spent = 0
+    total_pending_spent = 0
     team_budget = 400
     for row in rows:
         elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
@@ -56,5 +57,8 @@ def team():
             total_spent = total_spent + row.user_bid
         else:
             confirmed_list.append("False")
+            total_pending_spent = total_pending_spent + row.user_bid
     current_budget = team_budget - total_spent
-    return render_template('team.html', rows = rows, header = session.get('team'), confirmed_list = confirmed_list, total_spent = total_spent, current_budget = current_budget)
+    current_pending_budget = team_budget - current_budget - total_pending_spent
+    return render_template('team.html', rows = rows, header = session.get('team'), confirmed_list = confirmed_list, total_spent = total_spent,
+                            total_pending_spent = total_pending_spent, current_pending_budget = current_pending_budget, current_budget = current_budget)
