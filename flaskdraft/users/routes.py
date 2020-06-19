@@ -59,6 +59,6 @@ def team():
             confirmed_list.append("False")
             total_pending_spent = total_pending_spent + row.user_bid
     current_budget = team_budget - total_spent
-    current_pending_budget = team_budget - current_budget - total_pending_spent
+    current_pending_budget = current_budget - total_pending_spent
     return render_template('team.html', rows = rows, header = session.get('team'), confirmed_list = confirmed_list, total_spent = total_spent,
                             total_pending_spent = total_pending_spent, current_pending_budget = current_pending_budget, current_budget = current_budget)
