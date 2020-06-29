@@ -14,7 +14,7 @@ def search_page():
     form_player = PlayerConfirm()
     names = session.get('names')
     form_player.player.choices = [(index, names) for index, names in enumerate(names)]
-    if request.method == 'POST' and form_player.validate_on_submit():
+    if request.method == 'POST':
         player_choice_index = int(form_player.player.data)
         player_choice = names[player_choice_index]
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'}
