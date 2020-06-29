@@ -13,13 +13,18 @@ search = Blueprint('search', __name__)
 def search_page():
     form_player = PlayerConfirm()
     names = session.get('names')
-    form_player.player.choices = [(names, names) for names in names]
-    if request.method == 'POST' and form_player.validate_on_submit():
+    form_player.player.choices = [(index, names) for index, names in enumerate(names)]
+    if request.method == 'POST': and form_player.validate_on_submit():
+        player_choice_index = int(form_player.player.data)
+        player_choice = names[player_choice_index]
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'}
         results_page = requests.get("https://sortitoutsi.net/search/database?q=" + session.get('search_value') + "&game_id=11&type=player", headers = headers).text
         soup = BeautifulSoup(results_page, 'html.parser')
-        player_choice = form_player.player.data
-        url = soup.find('a', {'title' : player_choice})['href']
+        url_search = soup.findAll('a', {'title' : player_choice})
+        if len(url_search) < 2:
+            url = url_search[0]['href']
+        else:
+            url = url_search[player_choice_index]['href']
         segments = url.split('/')
         player_id = segments[5]
         player_page = requests.get("https://sortitoutsi.net/football-manager-2020/player/" + player_id + "/" + player_choice, headers = headers).text
