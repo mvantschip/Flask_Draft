@@ -4,6 +4,7 @@ from flaskdraft.models import registration, bid
 from flaskdraft.users.forms import RegistrationForm, TeamForm
 from datetime import datetime
 from sqlalchemy import func
+import pytz
 
 users = Blueprint('users', __name__)
 
@@ -43,8 +44,8 @@ def team_login():
 
 @users.route('/team', methods=['GET', 'POST'])
 def team():
-    subq = bid.query.distinct(bid.player_id).filter_by(username=session.get('team')).order_by(bid.player_id, bid.date_bid.desc()).subquery()
-    rows = bid.query.select_entity_from(subq).order_by(bid.date_bid.desc()).all()
+    subq = bid.query.distinct(bid.player_id).order_by(bid.player_id, bid.date_bid.desc()).subquery()
+    rows = bid.query.select_entity_from(subq).filter_by(username=session.get('team')).order_by(bid.date_bid.desc()).all()
     confirmed_list = []
     total_spent = 0
     total_pending_spent = 0
@@ -58,6 +59,9 @@ def team():
         else:
             confirmed_list.append("False")
             total_pending_spent = total_pending_spent + row.user_bid
+        row.date_bid = row.date_bid.replace(tzinfo=pytz.utc)
+        tz = pytz.timezone('Europe/Amsterdam')
+        row.date_bid = row.date_bid.astimezone(tz)
     current_budget = team_budget - total_spent
     current_pending_budget = current_budget - total_pending_spent
     return render_template('team.html', rows = rows, header = session.get('team'), confirmed_list = confirmed_list, total_spent = total_spent,
