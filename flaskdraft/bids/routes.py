@@ -19,7 +19,7 @@ def bid_page():
         elapsed_time = ((datetime.utcnow() - check_bid.date_bid).total_seconds())
         elapsed_time_hours = int(elapsed_time // 3600)
         elapsed_time_minutes = int((elapsed_time % 3600) // 60)
-        if  elapsed_time_hours > 12:
+        if  elapsed_time_hours >= 12:
             flash(f"{player_name} is al gekocht door {current_bid_username}. U kunt deze speler niet meer kopen.", 'danger')
         current_bid_value = round(check_bid.user_bid, 2)
         min_overbid_value = round((current_bid_value * 1.1), 2)

@@ -41,7 +41,7 @@ def overview():
         #check if 12 hours have passed to mark the confirmed bids as green
         elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
         elapsed_time_hours = int(elapsed_time // 3600)
-        if  elapsed_time_hours > 12:
+        if  elapsed_time_hours >= 12:
             confirmed_list.append("True")
         else:
             confirmed_list.append("False")

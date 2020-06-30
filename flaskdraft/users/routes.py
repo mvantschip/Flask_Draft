@@ -52,8 +52,8 @@ def team():
     team_budget = 400
     for row in rows:
         elapsed_time = (datetime.utcnow() - row.date_bid).total_seconds()
-        elapsed_time_hours = int(elapsed_time // 3600)
-        if  elapsed_time_hours > 12:
+        elapsed_time_hours = float(elapsed_time // 3600)
+        if  elapsed_time_hours >= 12:
             confirmed_list.append("True")
             total_spent = total_spent + row.user_bid
         else:
