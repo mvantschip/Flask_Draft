@@ -15,6 +15,7 @@ main = Blueprint('main', __name__)
 @main.route('/', methods=['GET', 'POST'])
 def index():
     form_search = PlayerSearch()
+    allow_transfers = False
     try:
         if request.method == 'POST' and form_search.validate():
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'}
@@ -29,8 +30,8 @@ def index():
             return redirect(url_for('search.search_page'))
     except:
         flash("Speler niet gevonden!", 'bottom')
-        return render_template('index.html', form_search = form_search)
-    return render_template('index.html', form_search = form_search)
+        return render_template('index.html', form_search = form_search, allow_transfers = allow_transfers)
+    return render_template('index.html', form_search = form_search, allow_transfers = allow_transfers)
 
 
 @main.route('/overview', methods=['GET', 'POST'])
